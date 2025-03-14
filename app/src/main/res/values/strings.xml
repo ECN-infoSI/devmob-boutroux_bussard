@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SimpleMail</string>
+    <string name="envoyer_mail">Envoyer un mail</string>
+    <string name="parametres">Parametres</string>
+    <string name="retour">Retour</string>
+    <string name="joindre">Joindre</string>
+    <string name="envoyer">Envoyer</string>
+    <string name="repondre">Répondre</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="revenir_liste_mail">Revenir à la liste des mails</string>
 </resources>
