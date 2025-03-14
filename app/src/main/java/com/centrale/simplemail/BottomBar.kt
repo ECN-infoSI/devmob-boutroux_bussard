@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 // Convert BottomBar to an object for easy reuse
 object BottomBar {
@@ -24,11 +26,13 @@ object BottomBar {
     fun Show(
         top: @Composable () -> Unit, // Composable content above the bottom bar
         buttons: List<TypeButton>, // List of buttons to display
+        navController: NavController,
         modifier: Modifier = Modifier
     ) {
         Scaffold(
             bottomBar = {
-                Bar(buttons = buttons) // Pass the list of buttons to Bar
+                Bar(buttons = buttons,
+                    navController= navController) // Pass the list of buttons to Bar
             }
         ) { paddingValues ->
             Box(
@@ -42,7 +46,7 @@ object BottomBar {
     }
 
     @Composable
-    fun Bar(buttons: List<TypeButton>, modifier: Modifier = Modifier) {
+    fun Bar(buttons: List<TypeButton>, navController: NavController, modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -51,7 +55,7 @@ object BottomBar {
         ) {
             buttons.forEach { typeButton ->
                 Button(
-                    onClick = { /* Handle click event */ },
+                    onClick = { handleButtonClick(typeButton, navController) }, // Call navigation function
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -63,6 +67,21 @@ object BottomBar {
                     )
                 }
             }
+        }
+    }
+
+
+    // Function to handle navigation based on TypeButton
+    fun handleButtonClick(button: TypeButton, navController: NavController) {
+        when (button) {
+            TypeButton.Retour -> navController.navigate("previous_screen") // Replace with actual route
+            TypeButton.Joindre -> navController.navigate("join_screen")
+            TypeButton.Envoyer -> navController.navigate("send_screen")
+            TypeButton.Revenir -> navController.navigate("mail_list_screen")
+            TypeButton.Repondre -> navController.navigate("reply_screen")
+            TypeButton.Supprimer -> navController.navigate("delete_screen")
+            TypeButton.EnvoyerMail -> navController.navigate("send_mail_screen")
+            TypeButton.Parametres -> navController.navigate("settings_screen")
         }
     }
 }
@@ -78,3 +97,4 @@ enum class TypeButton(val labelResId: Int) {
     EnvoyerMail(R.string.envoyer_mail),
     Parametres(R.string.parametres)
 }
+

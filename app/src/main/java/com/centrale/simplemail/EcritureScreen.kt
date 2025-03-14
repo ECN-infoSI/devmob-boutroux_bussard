@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 
 class EcritureScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,8 @@ class EcritureScreen : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SimpleMailTheme {
+
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     BottomBar.Show(
                         top=
@@ -50,6 +53,7 @@ class EcritureScreen : ComponentActivity() {
                                 }
                             },
                         buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
+                        navController= navController,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -61,6 +65,7 @@ class EcritureScreen : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun EcriturePreview() {
+    val navController= rememberNavController()
     SimpleMailTheme {
         BottomBar.Show(
             {
@@ -75,7 +80,8 @@ fun EcriturePreview() {
                     }
                 }
             },
-            buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer) // Specify the buttons to display
+            buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
+            navController= navController
         )
     }
 }
