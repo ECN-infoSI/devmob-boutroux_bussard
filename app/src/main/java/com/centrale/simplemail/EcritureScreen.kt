@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -34,7 +35,7 @@ class EcritureScreen : ComponentActivity() {
         setContent {
             SimpleMailTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BottomBar(
+                    BottomBar.Show(
                         top=
                             {
                                 Column(
@@ -48,6 +49,7 @@ class EcritureScreen : ComponentActivity() {
                                     }
                                 }
                             },
+                        buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -56,63 +58,11 @@ class EcritureScreen : ComponentActivity() {
     }
 }
 
-@Composable
-fun BottomBar(top: @Composable () -> Unit, modifier: Modifier = Modifier) {
-    Scaffold(
-        bottomBar = { Bar() } // This ensures the BottomBar stays at the bottom
-    ) { paddingValues ->
-        // Your screen content goes here
-        Box(modifier = Modifier.padding(paddingValues)) {
-            top()
-        }
-    }
-
-}
-
-//https://www.geeksforgeeks.org/bottom-navigation-bar-in-android-using-kotlin/
-@Composable
-fun Bar(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth() // Make Row span full width
-            .height(100.dp), // Set the height of the bottom bar
-        horizontalArrangement = Arrangement.Center // Center the buttons
-    ) {
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .weight(1f) // Make buttons expand equally
-                .fillMaxHeight(), // Ensure they fill the row's height
-            shape = RectangleShape // Make them rectangular
-        ) {
-            Text(stringResource(id = R.string.retour))
-        }
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            shape = RectangleShape
-        ) {
-            Text(stringResource(id = R.string.joindre))
-        }
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            shape = RectangleShape
-        ) {
-            Text(stringResource(id = R.string.envoyer))
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun EcriturePreview() {
     SimpleMailTheme {
-        BottomBar(
+        BottomBar.Show(
             {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -124,7 +74,8 @@ fun EcriturePreview() {
                         Text("Click Me")
                     }
                 }
-            }
+            },
+            buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer) // Specify the buttons to display
         )
     }
 }
