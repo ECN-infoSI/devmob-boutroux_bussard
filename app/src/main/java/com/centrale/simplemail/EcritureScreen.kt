@@ -17,12 +17,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.centrale.simplemail.ui.theme.SimpleMailTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class EcritureScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +34,20 @@ class EcritureScreen : ComponentActivity() {
         setContent {
             SimpleMailTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Ecriture(
-                        name = "Android",
+                    BottomBar(
+                        top=
+                            {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text("Hello, this is the top content!", fontSize = 24.sp)
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Button(onClick = { /* Do something */ }) {
+                                        Text("Click Me")
+                                    }
+                                }
+                            },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -42,16 +57,13 @@ class EcritureScreen : ComponentActivity() {
 }
 
 @Composable
-fun Ecriture(name: String, modifier: Modifier = Modifier) {
+fun BottomBar(top: @Composable () -> Unit, modifier: Modifier = Modifier) {
     Scaffold(
-        bottomBar = { BottomBar() } // This ensures the BottomBar stays at the bottom
+        bottomBar = { Bar() } // This ensures the BottomBar stays at the bottom
     ) { paddingValues ->
         // Your screen content goes here
         Box(modifier = Modifier.padding(paddingValues)) {
-            Text(
-                text = "Hello $name!",
-                modifier = modifier
-            )
+            top()
         }
     }
 
@@ -59,7 +71,7 @@ fun Ecriture(name: String, modifier: Modifier = Modifier) {
 
 //https://www.geeksforgeeks.org/bottom-navigation-bar-in-android-using-kotlin/
 @Composable
-fun BottomBar(modifier: Modifier = Modifier) {
+fun Bar(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth() // Make Row span full width
@@ -100,6 +112,19 @@ fun BottomBar(modifier: Modifier = Modifier) {
 @Composable
 fun EcriturePreview() {
     SimpleMailTheme {
-        Ecriture("Android")
+        BottomBar(
+            {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Hello, this is the top content!", fontSize = 24.sp)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { /* Do something */ }) {
+                        Text("Click Me")
+                    }
+                }
+            }
+        )
     }
 }
