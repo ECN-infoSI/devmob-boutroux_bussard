@@ -112,7 +112,6 @@ object BottomBar {
                 navController.navigate(DataSource.Routes.route_revenir_liste_mail)
             }
             TypeButton.Repondre -> {
-                viewModel.prepareReply()
                 navController.navigate(DataSource.Routes.route_repondre)
             }
             TypeButton.Supprimer -> {

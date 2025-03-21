@@ -14,6 +14,7 @@ import com.centrale.simplemail.data.DataSource
 import com.centrale.simplemail.screens.MailViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,18 +31,20 @@ fun ListeMailsScreen(
     // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
-            Text(text = "Welcome to the Liste Mails Screen!")
-            Button(
-                onClick = {
-                    navController.navigate(DataSource.Routes.lecture)
-                }, // Call navigation function
-                modifier = modifier,
-                shape = RectangleShape,
-            ){
-                Text(
-                    "test mail",
-                    textAlign = TextAlign.Center
-                )
+            Column {
+                Text(text = "Welcome to the Liste Mails Screen!")
+                Button(
+                    onClick = {
+                        navController.navigate(DataSource.Routes.lecture)
+                    }, // Call navigation function
+                    modifier = modifier,
+                    shape = RectangleShape,
+                ){
+                    Text(
+                        "test mail",
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         },
         buttons = listOf(TypeButton.EnvoyerMail, TypeButton.Parametres), // Specify the buttons to display

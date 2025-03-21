@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +42,13 @@ fun EcritureScreen(
     // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
-            ShowMail(mail= "mail", destinataire="destinataire" ,objet="objet")
+            ShowMail(
+                mail = "mail",
+                destinataire = "destinataire",
+                objet = "objet",
+                viewModel = viewModel,
+                modifier = modifier
+            )
         },
         buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
         navController= navController,
@@ -56,12 +63,21 @@ fun ReplyScreen(
     viewModel: MailViewModel,
     modifier: Modifier,
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.prepareReply() // Exécute `prepareReply()` une seule fois lors de la première composition
+    }
     val uiState = viewModel.uiState.collectAsState() // ✅ Observer les changements
     Column {
         // Your UI content for the LectureScreen
         BottomBar.Show(
             top= {
-                ShowMail(mail=uiState.value.contenu, destinataire=uiState.value.destinataire ,objet=uiState.value.objet)
+                ShowMail(
+                    mail = uiState.value.contenu,
+                    destinataire = uiState.value.destinataire,
+                    objet = uiState.value.objet,
+                    viewModel = viewModel,
+                    modifier = modifier
+                )
                 // Add UI for replying to the email
             },
             buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
@@ -74,6 +90,7 @@ fun ReplyScreen(
 
 @Composable
 fun ShowMail(
+    viewModel: MailViewModel,
     mail : String,
     destinataire : String,
     objet : String,
@@ -94,7 +111,7 @@ fun ShowMail(
                 textAlign = TextAlign.Left,
             )
             Text(
-                text = "$objet",
+                text = objet,
                 fontSize = 20.sp,
                 lineHeight = 20.sp,
                 textAlign = TextAlign.Left,
@@ -110,7 +127,7 @@ fun ShowMail(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "$destinataire",
+                text = destinataire,
                 fontSize = 15.sp,
                 lineHeight = 20.sp,
                 textAlign = TextAlign.Left,
@@ -129,24 +146,15 @@ fun ShowMail(
                 .imePadding(),
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = "test d'un contenu \n sur plusieurs lignes",
-                fontSize = 30.sp,
-                lineHeight = 50.sp,
-                textAlign = TextAlign.Left
-            )
-            HorizontalDivider(
-                thickness = 2.dp,
-            )
-
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Top
             ) {
+                val uiState = viewModel.uiState.collectAsState()
                 TextField(
-                    value = writtingText,
+                    value = uiState.value.contenu,
                     onValueChange = {
-                        writtingText = it
+                        viewModel.setContenu(it)
                     },
                     modifier = modifier
                         .fillMaxWidth(),

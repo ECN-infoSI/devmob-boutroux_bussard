@@ -89,6 +89,13 @@ class MailViewModel : ViewModel() {
         setDestinataire(exp)
         val obj = _uiState.value.objet
         setObjet("RE : ${obj}")
+        val cont = _uiState.value.contenu
+        setContenu(
+            "${cont}" +
+                    "\n" +
+                    "\n------------------------------" +
+                    "\n"
+        )
     }
 
     /**
