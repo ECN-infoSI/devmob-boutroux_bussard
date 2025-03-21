@@ -17,8 +17,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.centrale.simplemail.data.DataSource
+import com.centrale.simplemail.screens.MailViewModel
+
+private const val s = "previous_screen"
 
 // Convert BottomBar to an object for easy reuse
 object BottomBar {
@@ -27,12 +31,15 @@ object BottomBar {
         top: @Composable () -> Unit, // Composable content above the bottom bar
         buttons: List<TypeButton>, // List of buttons to display
         navController: NavController,
+        viewModel: MailViewModel = viewModel(),
         modifier: Modifier = Modifier
     ) {
         Scaffold(
             bottomBar = {
                 Bar(buttons = buttons,
-                    navController= navController) // Pass the list of buttons to Bar
+                    navController= navController,
+                    viewModel = viewModel,
+                ) // Pass the list of buttons to Bar
             }
         ) { paddingValues ->
             Box(
@@ -46,7 +53,12 @@ object BottomBar {
     }
 
     @Composable
-    fun Bar(buttons: List<TypeButton>, navController: NavController, modifier: Modifier = Modifier) {
+    fun Bar(
+        buttons: List<TypeButton>,
+        navController: NavController,
+        viewModel: MailViewModel,
+        modifier: Modifier = Modifier
+    ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -55,7 +67,12 @@ object BottomBar {
         ) {
             buttons.forEach { typeButton ->
                 Button(
-                    onClick = { handleButtonClick(typeButton, navController) }, // Call navigation function
+                    onClick = {
+                        HandleButtonClick(
+                            button = typeButton,
+                            navController = navController,
+                            viewModel = viewModel
+                        ) }, // Call navigation function
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -72,16 +89,44 @@ object BottomBar {
 
 
     // Function to handle navigation based on TypeButton
-    fun handleButtonClick(button: TypeButton, navController: NavController, mail: String = "", objet: String = "") {
+    fun HandleButtonClick(
+        button: TypeButton,
+        navController: NavController,
+        viewModel: MailViewModel,
+        ) {
         when (button) {
-            TypeButton.Retour -> navController.navigate("previous_screen") // Replace with actual route
-            TypeButton.Joindre -> navController.navigate("join_screen")
-            TypeButton.Envoyer -> navController.navigate("send_screen")
-            TypeButton.Revenir -> navController.navigate("liste_mails_screen")
-            TypeButton.Repondre -> navController.navigate("reply_screen/$mail/$objet")
-            TypeButton.Supprimer -> navController.navigate("delete_screen")
-            TypeButton.EnvoyerMail -> navController.navigate("ecriture_screen")
-            TypeButton.Parametres -> navController.navigate("settings_screen")
+            TypeButton.Retour -> {
+//                viewModel.logAction("Retour")
+                navController.navigate(DataSource.Routes.route_retour)
+            }
+            TypeButton.Joindre -> {
+//                viewModel.prepareAttachment()
+                navController.navigate(DataSource.Routes.route_joindre)
+            }
+            TypeButton.Envoyer -> {
+//                viewModel.sendMail()
+                navController.navigate(DataSource.Routes.route_envoyer)
+            }
+            TypeButton.RevenirListeMail -> {
+//                viewModel.refreshMailList()
+                navController.navigate(DataSource.Routes.route_revenir_liste_mail)
+            }
+            TypeButton.Repondre -> {
+                viewModel.prepareReply()
+                navController.navigate(DataSource.Routes.route_repondre)
+            }
+            TypeButton.Supprimer -> {
+//                viewModel.deleteSelectedMail()
+                navController.navigate(DataSource.Routes.route_supprimer)
+            }
+            TypeButton.EnvoyerMail -> {
+//                viewModel.prepareNewMail()
+                navController.navigate(DataSource.Routes.route_page_envoyer_mail)
+            }
+            TypeButton.Parametres -> {
+//                viewModel.loadSettings()
+                navController.navigate(DataSource.Routes.route_parametres)
+            }
         }
     }
 }
@@ -91,7 +136,7 @@ enum class TypeButton(val labelResId: Int) {
     Retour(R.string.retour),
     Joindre(R.string.joindre),
     Envoyer(R.string.envoyer),
-    Revenir(R.string.revenir_liste_mail),
+    RevenirListeMail(R.string.revenir_liste_mail),
     Repondre(R.string.repondre),
     Supprimer(R.string.supprimer),
     EnvoyerMail(R.string.envoyer_mail),

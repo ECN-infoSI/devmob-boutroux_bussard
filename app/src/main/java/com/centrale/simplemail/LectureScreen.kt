@@ -28,36 +28,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.centrale.simplemail.ui.theme.SimpleMailTheme
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.centrale.simplemail.screens.MailViewModel
 
 /**
  * Composant qui affiche la page de lecture d'un mail
  */
 @Composable
-fun LectureScreen(navController: NavController) {
+fun LectureScreen(
+    navController: NavController,
+    viewModel: MailViewModel,
+    modifier: Modifier = Modifier,
+    onOpenMail : (String) -> Unit = {},
+    ) {
     // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
-            SelectOptionScreen()
+            SelectOptionScreen(
+                modifier = modifier,
+                viewModel = viewModel,
+            )
         },
-        buttons = listOf(TypeButton.Revenir, TypeButton.Repondre, TypeButton.Supprimer), // Specify the buttons to display
-        navController= navController
+        buttons = listOf(TypeButton.RevenirListeMail, TypeButton.Repondre, TypeButton.Supprimer), // Specify the buttons to display
+        navController= navController,
+        viewModel = viewModel,
+        modifier = Modifier,
     )
 }
 
 
 @Composable
 fun SelectOptionScreen(
+    viewModel: MailViewModel,
     modifier: Modifier = Modifier
 ) {
+    val uiState = viewModel.uiState.collectAsState() // ✅ Observer les changements
     Column(
         modifier = modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Un super objet",
+            text = uiState.value.objet,
             fontSize = 20.sp,
             lineHeight = 20.sp,
             textAlign = TextAlign.Left,
@@ -74,7 +88,7 @@ fun SelectOptionScreen(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "Envoyeur@gmail.com",
+                text = uiState.value.expediteur,
                 fontSize = 15.sp,
                 lineHeight = 20.sp,
                 textAlign = TextAlign.Left,
@@ -87,7 +101,7 @@ fun SelectOptionScreen(
             thickness = 2.dp
         )
         Text(
-            text = "le contenu de mon mail \n test",
+            text = uiState.value.contenu,
             fontSize = 30.sp,
             lineHeight = 50.sp,
             textAlign = TextAlign.Left
@@ -100,7 +114,8 @@ fun SelectOptionScreen(
 fun SelectOptionPreview() {
     SimpleMailTheme {
         SelectOptionScreen(
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxHeight(),
+            viewModel = MailViewModel()
         )
     }
 }
