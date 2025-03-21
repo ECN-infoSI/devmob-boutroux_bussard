@@ -61,7 +61,7 @@ fun ReplyScreen(
         // Your UI content for the LectureScreen
         BottomBar.Show(
             top= {
-                ShowMail(mail=uiState.value.contenu, destinataire=uiState.value.destinataire ,objet="RE: ${uiState.value.objet}")
+                ShowMail(mail=uiState.value.contenu, destinataire=uiState.value.destinataire ,objet=uiState.value.objet)
                 // Add UI for replying to the email
             },
             buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
