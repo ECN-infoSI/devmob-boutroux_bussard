@@ -22,6 +22,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -33,6 +38,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.centrale.simplemail.BottomBar.handleButtonClick
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -61,6 +76,7 @@ fun ShowMail(
     objet : String,
     modifier: Modifier = Modifier
 ) {
+    var writtingText by remember { mutableStateOf("") }
     Column(
         modifier = modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Top
@@ -103,12 +119,51 @@ fun ShowMail(
         HorizontalDivider(
             thickness = 2.dp,
         )
-        Text(
-            text = "le contenu du mail reçu \n test",
-            fontSize = 30.sp,
-            lineHeight = 50.sp,
-            textAlign = TextAlign.Left
-        )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState(), enabled = true)
+                    .imePadding(),
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text(
+                    text = "test d'un contenu \n sur plusieurs lignes",
+                    fontSize = 30.sp,
+                    lineHeight = 50.sp,
+                    textAlign = TextAlign.Left
+                )
+                HorizontalDivider(
+                    thickness = 2.dp,
+                )
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    TextField(
+                        value = writtingText,
+                        onValueChange = {
+                            writtingText = it
+                        },
+                        modifier = modifier
+                            .fillMaxWidth(),
+
+                        placeholder = { Text("écrivez votre mail ici") },
+                        maxLines = 2000,
+
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Transparent
+                        )
+                    )
+                }
+            }
+
     }
 }
 
@@ -125,7 +180,7 @@ fun EcritureBar(buttons: List<TypeButton>, navController: NavController, modifie
                 onClick = { handleButtonClick(typeButton, navController) }, // Call navigation function
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
+                    .fillMaxWidth(),
                 shape = RectangleShape
             ) {
                 Text(
