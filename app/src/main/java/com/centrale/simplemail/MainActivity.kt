@@ -53,6 +53,7 @@ fun AppNavHost() {
             ) // Navigate to LectureScreen
         }
         composable(DataSource.Routes.route_page_envoyer_mail) {
+            viewModel.resetMail()
             EcritureScreen(
                 navController = navController,
                 viewModel = viewModel,
