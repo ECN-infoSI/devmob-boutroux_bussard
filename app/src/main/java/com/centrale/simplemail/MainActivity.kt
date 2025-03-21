@@ -3,71 +3,56 @@ package com.centrale.simplemail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.centrale.simplemail.ui.theme.SimpleMailTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
-            SimpleMailTheme {
-                Test()
-            }
+            AppNavHost() // Launch the NavHost composable
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun AppNavHost() {
+    val navController = rememberNavController() // Initialize the NavController
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SimpleMailTheme {
-        Greeting("Android")
+    // Define your NavHost
+    NavHost(navController = navController, startDestination = "lecture_screen") {
+        composable("lecture_screen") {
+            LectureScreen(navController) // Navigate to LectureScreen
+        }
+        composable("ecriture_screen") {
+            EcritureScreen(navController) // Navigate to EcritureScreen
+        }
+        composable("liste_mails_screen") {
+            ListeMailsScreen(navController) // Navigate to ListeMailsScreen
+        }
+
+        composable("reply_screen/{senderEmail}/{objet}",
+            arguments = listOf(navArgument("senderEmail") { type = NavType.StringType },navArgument("objet") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val senderEmail = backStackEntry.arguments?.getString("senderEmail") ?: "Unknown"
+            val objet = backStackEntry.arguments?.getString("objet") ?: "Unknown"
+            ReplyScreen(navController, senderEmail= senderEmail, objet=objet) // Pass extracted argument
+        }
+        // Other screens can be added here
     }
 }
 
-@Composable
-fun Test() {
-    val navController = rememberNavController()
-
-    BottomBar.Show(
-        top = {
-            NavHost(
-                navController,
-                startDestination = "home_screen",
-                Modifier.fillMaxSize()
-            ) {
-                composable("home_screen") { Text("Home Screen") }
-                composable("previous_screen") { Text("Previous Screen") }
-                composable("join_screen") { Text("Join Screen") }
-                composable("send_screen") { Text("Send Screen") }
-                composable("mail_list_screen") { Text("Mail List Screen") }
-                composable("reply_screen") { Text("Reply Screen") }
-                composable("delete_screen") { Text("Delete Screen") }
-                composable("send_mail_screen") { Text("Send Mail Screen") }
-                composable("settings_screen") { Text("Settings Screen") }
-            }
-        },
-        buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer),
-        navController= navController,
-        modifier = Modifier.fillMaxSize()
-    )
+fun navigateToScreen(navController: NavController, route: String) {
+    navController.navigate(route)
 }

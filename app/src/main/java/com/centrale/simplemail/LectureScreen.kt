@@ -13,43 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.cupcake.ui
+package com.centrale.simplemail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.centrale.simplemail.ui.theme.SimpleMailTheme
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Surface
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 /**
  * Composant qui affiche la page de lecture d'un mail
  */
+@Composable
+fun LectureScreen(navController: NavController) {
+    // Your UI content for the LectureScreen
+    BottomBar.Show(
+        top= {
+            SelectOptionScreen()
+        },
+        buttons = listOf(TypeButton.Revenir, TypeButton.Repondre, TypeButton.Supprimer), // Specify the buttons to display
+        navController= navController
+    )
+}
+
+
 @Composable
 fun SelectOptionScreen(
     modifier: Modifier = Modifier
@@ -62,7 +60,6 @@ fun SelectOptionScreen(
             text = "Un super objet",
             fontSize = 20.sp,
             lineHeight = 20.sp,
-            color = Color.White,
             textAlign = TextAlign.Left,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -74,14 +71,12 @@ fun SelectOptionScreen(
                 text = "De :  ",
                 fontSize = 15.sp,
                 lineHeight = 20.sp,
-                color = Color.White,
                 textAlign = TextAlign.Left
             )
             Text(
                 text = "Envoyeur@gmail.com",
                 fontSize = 15.sp,
                 lineHeight = 20.sp,
-                color = Color.White,
                 textAlign = TextAlign.Left,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -89,14 +84,12 @@ fun SelectOptionScreen(
             )
         }
         HorizontalDivider(
-            thickness = 2.dp,
-            color = Color.White
+            thickness = 2.dp
         )
         Text(
             text = "le contenu de mon mail \n test",
             fontSize = 30.sp,
             lineHeight = 50.sp,
-            color = Color.White,
             textAlign = TextAlign.Left
         )
     }

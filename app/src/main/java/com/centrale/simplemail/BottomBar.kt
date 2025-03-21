@@ -72,15 +72,15 @@ object BottomBar {
 
 
     // Function to handle navigation based on TypeButton
-    fun handleButtonClick(button: TypeButton, navController: NavController) {
+    fun handleButtonClick(button: TypeButton, navController: NavController, mail: String = "", objet: String = "") {
         when (button) {
             TypeButton.Retour -> navController.navigate("previous_screen") // Replace with actual route
             TypeButton.Joindre -> navController.navigate("join_screen")
             TypeButton.Envoyer -> navController.navigate("send_screen")
-            TypeButton.Revenir -> navController.navigate("mail_list_screen")
-            TypeButton.Repondre -> navController.navigate("reply_screen")
+            TypeButton.Revenir -> navController.navigate("liste_mails_screen")
+            TypeButton.Repondre -> navController.navigate("reply_screen/$mail/$objet")
             TypeButton.Supprimer -> navController.navigate("delete_screen")
-            TypeButton.EnvoyerMail -> navController.navigate("send_mail_screen")
+            TypeButton.EnvoyerMail -> navController.navigate("ecriture_screen")
             TypeButton.Parametres -> navController.navigate("settings_screen")
         }
     }
