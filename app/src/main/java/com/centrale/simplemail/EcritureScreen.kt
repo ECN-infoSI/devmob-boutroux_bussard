@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import com.centrale.simplemail.screens.MailViewModel
 
 
@@ -39,13 +43,14 @@ fun EcritureScreen(
     viewModel: MailViewModel,
     modifier: Modifier,
 ) {
+    val uiState = viewModel.uiState.collectAsState()
     // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
             ShowMail(
-                mail = "mail",
-                destinataire = "destinataire",
-                objet = "objet",
+                mail = uiState.value.contenu,
+                destinataire = uiState.value.destinataire,
+                objet = uiState.value.objet,
                 viewModel = viewModel,
                 modifier = modifier
             )
@@ -96,44 +101,75 @@ fun ShowMail(
     objet : String,
     modifier: Modifier = Modifier
 ) {
-    var writtingText by remember { mutableStateOf("") }
+    val uiState = viewModel.uiState.collectAsState()
     Column(
         modifier = modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Top
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically // Aligne les éléments verticalement
         ) {
             Text(
                 text = "Objet : ",
                 fontSize = 20.sp,
                 lineHeight = 20.sp,
-                textAlign = TextAlign.Left,
+                textAlign = TextAlign.Left
             )
-            Text(
-                text = objet,
-                fontSize = 20.sp,
-                lineHeight = 20.sp,
-                textAlign = TextAlign.Left,
+            TextField(
+                value = uiState.value.objet,
+                onValueChange = { viewModel.setObjet(it) },
+                modifier = Modifier
+                    .weight(1f), // Permet au champ de texte de prendre tout l’espace restant
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    textAlign = TextAlign.Left
+                ),
+                singleLine = true, // Empêche les retours à la ligne
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
             )
         }
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically // Aligne les éléments verticalement
         ){
             Text(
                 text = "Destinataire :  ",
-                fontSize = 15.sp,
-                lineHeight = 20.sp,
+                fontSize = 18.sp,
+                lineHeight = 22.sp,
                 textAlign = TextAlign.Left
             )
-            Text(
-                text = destinataire,
-                fontSize = 15.sp,
-                lineHeight = 20.sp,
-                textAlign = TextAlign.Left,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
+            TextField(
+                value = uiState.value.destinataire,
+                onValueChange = { viewModel.setDestinataire(it) },
+                modifier = Modifier
+                    .weight(1f), // Permet au champ de texte de prendre tout l’espace restant
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    fontSize = 18.sp,
+                    lineHeight = 22.sp,
+                    textAlign = TextAlign.Left,
+                ),
+                singleLine = true, // Empêche les retours à la ligne
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
             )
         }
         HorizontalDivider(
@@ -170,7 +206,12 @@ fun ShowMail(
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent
-                    )
+                    ),
+                    textStyle = TextStyle(
+                        fontSize = 25.sp,
+                        lineHeight = 30.sp,
+                        textAlign = TextAlign.Left,
+                    ),
                 )
             }
         }
