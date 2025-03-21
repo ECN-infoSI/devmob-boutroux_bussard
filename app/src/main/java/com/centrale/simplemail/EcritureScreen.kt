@@ -22,41 +22,116 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.centrale.simplemail.BottomBar.handleButtonClick
 
-class EcritureScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            SimpleMailTheme {
 
-                val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BottomBar.Show(
-                        top=
-                            {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text("Hello, this is the top content!", fontSize = 24.sp)
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Button(onClick = { /* Do something */ }) {
-                                        Text("Click Me")
-                                    }
-                                }
-                            },
-                        buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
-                        navController= navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+@Composable
+fun EcritureScreen(navController: NavController) {
+    // Your UI content for the LectureScreen
+    BottomBar.Show(
+        top= {
+            ShowMail(mail= "mail", objet="objet")
+        },
+        buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
+        navController= navController
+    )
+}
+
+@Composable
+fun ReplyScreen(navController: NavController, senderEmail: String, objet: String) {
+    Column {
+        ShowMail(mail= "$senderEmail", objet="RE: $objet")
+        // Add UI for replying to the email
+    }
+}
+
+@Composable
+fun ShowMail(
+    mail : String,
+    objet : String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Objet : ",
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Left,
+            )
+            Text(
+                text = "$objet",
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Left,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ){
+            Text(
+                text = "Destinataire :  ",
+                fontSize = 15.sp,
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Left
+            )
+            Text(
+                text = "$mail",
+                fontSize = 15.sp,
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Left,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        HorizontalDivider(
+            thickness = 2.dp,
+        )
+        Text(
+            text = "le contenu du mail reçu \n test",
+            fontSize = 30.sp,
+            lineHeight = 50.sp,
+            textAlign = TextAlign.Left
+        )
+    }
+}
+
+@Composable
+fun EcritureBar(buttons: List<TypeButton>, navController: NavController, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(110.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        buttons.forEach { typeButton ->
+            Button(
+                onClick = { handleButtonClick(typeButton, navController) }, // Call navigation function
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                shape = RectangleShape
+            ) {
+                Text(
+                    stringResource(id = typeButton.labelResId),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -67,21 +142,6 @@ class EcritureScreen : ComponentActivity() {
 fun EcriturePreview() {
     val navController= rememberNavController()
     SimpleMailTheme {
-        BottomBar.Show(
-            {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("Hello, this is the top content!", fontSize = 24.sp)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { /* Do something */ }) {
-                        Text("Click Me")
-                    }
-                }
-            },
-            buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
-            navController= navController
-        )
+        EcritureScreen(navController= navController)
     }
 }
