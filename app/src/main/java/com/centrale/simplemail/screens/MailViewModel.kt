@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 /**
- * [MailViewModel] holds information about a cupcake order in terms of quantity, flavor, and
- * pickup date. It also knows how to calculate the total price based on these order details.
+ * [MailViewModel] holds information about a mail.
+ * It also has methods that can modify its state depending on the route we are taking.
  */
 class MailViewModel : ViewModel() {
 
@@ -82,6 +82,11 @@ class MailViewModel : ViewModel() {
         _uiState.value = com.centrale.simplemail.data.MailUiState()
     }
 
+    /**
+     * Prepares the state to reply to the sender of the mail.
+     * Adding RE : in front of the object.
+     * Adding a separation between the old mail and the new mail.
+     */
     fun prepareReply(){
         val exp = _uiState.value.expediteur
         val dest = _uiState.value.destinataire

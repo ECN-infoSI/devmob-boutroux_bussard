@@ -18,7 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -27,16 +26,14 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.centrale.simplemail.screens.MailViewModel
 
-
+/**
+ * Displays the screen used to write an email.
+ */
 @Composable
 fun EcritureScreen(
     navController: NavController,
@@ -44,7 +41,6 @@ fun EcritureScreen(
     modifier: Modifier,
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
             ShowMail(
@@ -62,6 +58,9 @@ fun EcritureScreen(
     )
 }
 
+/**
+ * Displays the screen used to write an email to reply to another email.
+ */
 @Composable
 fun ReplyScreen(
     navController: NavController,
@@ -69,11 +68,10 @@ fun ReplyScreen(
     modifier: Modifier,
 ) {
     LaunchedEffect(Unit) {
-        viewModel.prepareReply() // Exécute `prepareReply()` une seule fois lors de la première composition
+        viewModel.prepareReply() // Execute `prepareReply()` once during the first composition
     }
-    val uiState = viewModel.uiState.collectAsState() // ✅ Observer les changements
+    val uiState = viewModel.uiState.collectAsState() // Observer les changements
     Column {
-        // Your UI content for the LectureScreen
         BottomBar.Show(
             top= {
                 ShowMail(
@@ -83,7 +81,6 @@ fun ReplyScreen(
                     viewModel = viewModel,
                     modifier = modifier
                 )
-                // Add UI for replying to the email
             },
             buttons = listOf(TypeButton.Retour, TypeButton.Joindre, TypeButton.Envoyer), // Specify the buttons to display
             navController= navController,
@@ -93,6 +90,9 @@ fun ReplyScreen(
     }
 }
 
+/**
+ * Displays a mail where you can write.
+ */
 @Composable
 fun ShowMail(
     viewModel: MailViewModel,
@@ -186,7 +186,6 @@ fun ShowMail(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Top
             ) {
-                val uiState = viewModel.uiState.collectAsState()
                 TextField(
                     value = uiState.value.contenu,
                     onValueChange = {
@@ -218,6 +217,9 @@ fun ShowMail(
     }
 }
 
+/**
+ * Preview for the writing an email from scratch.
+ */
 @Preview(showBackground = true)
 @Composable
 fun EcriturePreview() {
@@ -231,6 +233,9 @@ fun EcriturePreview() {
     }
 }
 
+/**
+ * Preview for the replying to an email.
+ */
 @Preview(showBackground = true)
 @Composable
 fun RepondrePreview() {

@@ -6,12 +6,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.centrale.simplemail.screens.MailViewModel
 
+/**
+ * Displays  the settings, probably only the most important ones to not lose the user.
+ * For now it is empty.
+ */
 @Composable
 fun ParametresScreen(
     navController: NavController,
     viewModel: MailViewModel,
     modifier: Modifier) {
-    // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
             Text(text = "Welcome to the Parametres Screen!")

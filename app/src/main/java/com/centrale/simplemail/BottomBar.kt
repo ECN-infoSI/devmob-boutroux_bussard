@@ -24,7 +24,12 @@ import com.centrale.simplemail.screens.MailViewModel
 
 private const val s = "previous_screen"
 
-// Convert BottomBar to an object for easy reuse
+/**
+ * BottomBar is an object for easy reuse
+ * It is used throughout the app to display the bar at the bottom of the screen.
+ * It calls routes depending on the button the user clicks.
+ * Put everything else in the [top] parameter.
+ */
 object BottomBar {
     @Composable
     fun Show(
@@ -52,6 +57,10 @@ object BottomBar {
         }
     }
 
+    /**
+     * displays a bar with buttons.
+     * The names and the effects of the buttons will depend on [buttons].
+     */
     @Composable
     fun Bar(
         buttons: List<TypeButton>,
@@ -87,8 +96,10 @@ object BottomBar {
         }
     }
 
-
-    // Function to handle navigation based on TypeButton
+    /**
+     * Function to handle navigation based on TypeButton.
+     * It handles only the navigation that is linked to the bottom bar.
+     */
     fun HandleButtonClick(
         button: TypeButton,
         navController: NavController,
@@ -130,7 +141,10 @@ object BottomBar {
     }
 }
 
-// Move TypeButton outside of BottomBar for easier access
+// Put TypeButton outside of BottomBar for easier access
+/**
+ * Defines every button that can appear on the bottom bar.
+ */
 enum class TypeButton(val labelResId: Int) {
     Retour(R.string.retour),
     Joindre(R.string.joindre),

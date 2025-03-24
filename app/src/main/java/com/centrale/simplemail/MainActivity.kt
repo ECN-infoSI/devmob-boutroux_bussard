@@ -3,24 +3,19 @@ package com.centrale.simplemail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.centrale.simplemail.screens.MailViewModel
-import com.centrale.simplemail.ui.theme.SimpleMailTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.centrale.simplemail.data.DataSource
 
+/**
+ * Class that is called on startup and that launches the navhost.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +26,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Composable that takes care of every route in the app.
+ */
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController() // Initialize the NavController
@@ -52,6 +50,7 @@ fun AppNavHost() {
                 viewModel = viewModel
             ) // Navigate to LectureScreen
         }
+
         composable(DataSource.Routes.route_page_envoyer_mail) {
             viewModel.resetMail()
             EcritureScreen(
@@ -60,6 +59,7 @@ fun AppNavHost() {
                 modifier = Modifier,
                 ) // Navigate to EcritureScreen
         }
+
         composable(DataSource.Routes.route_revenir_liste_mail) {
             ListeMailsScreen(
                 navController = navController,
@@ -73,15 +73,16 @@ fun AppNavHost() {
                 navController,
                 viewModel = viewModel,
                 modifier = Modifier,
-            ) // Pass extracted argument
+            ) // Navigate to ReplyScreen
         }
 
         composable(route = DataSource.Routes.route_parametres) {
+            // For now the parametres screen is empty.
             ParametresScreen(
                 navController,
                 viewModel = viewModel,
                 modifier = Modifier,
-            ) // Pass extracted argument
+            ) // Navigate to ParametresScreen
         }
 
         composable(route = DataSource.Routes.route_retour) {
@@ -93,19 +94,21 @@ fun AppNavHost() {
         }
 
         composable(route = DataSource.Routes.route_envoyer) {
+            // fake route that will later send an email to the specified receiver.
             EcritureScreen(
                 navController = navController,
                 viewModel = viewModel,
                 modifier = Modifier,
-            ) // Navigate to ListeMailsScreen
+            ) // Navigate to EcritureScreen
         }
 
         composable(route = DataSource.Routes.route_joindre) {
+            // fake route that will later be used to add a document to the mail.
             EcritureScreen(
                 navController = navController,
                 viewModel = viewModel,
                 modifier = Modifier,
-            ) // Navigate to ListeMailsScreen
+            ) // Navigate to EcritureScreen
         }
 
         composable(route = DataSource.Routes.route_supprimer) {
@@ -117,8 +120,4 @@ fun AppNavHost() {
         }
         // Other screens can be added here
     }
-}
-
-fun navigateToScreen(navController: NavController, route: String) {
-    navController.navigate(route)
 }

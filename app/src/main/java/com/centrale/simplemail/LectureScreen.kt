@@ -44,7 +44,6 @@ fun LectureScreen(
     modifier: Modifier = Modifier,
     onOpenMail : (String) -> Unit = {},
     ) {
-    // Your UI content for the LectureScreen
     BottomBar.Show(
         top= {
             SelectOptionScreen(
@@ -59,13 +58,16 @@ fun LectureScreen(
     )
 }
 
-
+/**
+ * Displays the email to read.
+ * It shows an object, an expediter and a receiver.
+ */
 @Composable
 fun SelectOptionScreen(
     viewModel: MailViewModel,
     modifier: Modifier = Modifier
 ) {
-    val uiState = viewModel.uiState.collectAsState() // ✅ Observer les changements
+    val uiState = viewModel.uiState.collectAsState() // Observer les changements
     Column(
         modifier = modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Top
@@ -109,6 +111,9 @@ fun SelectOptionScreen(
     }
 }
 
+/**
+ * Preview for the reading an email.
+ */
 @Preview
 @Composable
 fun SelectOptionPreview() {

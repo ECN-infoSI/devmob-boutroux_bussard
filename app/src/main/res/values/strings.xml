@@ -1,4 +1,5 @@
 <resources>
+<!--    Texts displayed on the buttons-->
     <string name="app_name">SimpleMail</string>
     <string name="envoyer_mail">Envoyer un mail</string>
     <string name="parametres">Parametres</string>
